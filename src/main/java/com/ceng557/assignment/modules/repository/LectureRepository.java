@@ -7,5 +7,4 @@ public interface LectureRepository extends CrudRepository<Lecture, Long> {
 
 
 
-
 }

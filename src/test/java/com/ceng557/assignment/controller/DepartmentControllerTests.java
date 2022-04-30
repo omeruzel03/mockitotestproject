@@ -3,6 +3,8 @@ package com.ceng557.assignment.controller;
 import com.ceng557.assignment.modules.controller.DepartmentController;
 import com.ceng557.assignment.modules.entity.Department;
 import com.ceng557.assignment.modules.service.DepartmentService;
+import com.ceng557.assignment.rest.GenericException;
+import com.ceng557.assignment.rest.enums.MessageCodeEnum;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.*;
 import org.mockito.Mockito;
@@ -14,7 +16,6 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Collections;
 
-import static org.mockito.ArgumentMatchers.any;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -56,17 +57,16 @@ public class DepartmentControllerTests {
 
     @Test
     @Order(2)
-    public void testFirstDepartmentByNameContains() throws Exception {
-        Mockito.when(departmentService.getFirstDepartmentByNameContains(any())).thenReturn(department);
+    public void testWarningDepartmentList() throws Exception {
+        Mockito.when(departmentService.getDepartmentList())
+                .thenThrow(new GenericException.GenericExceptionBuilder(MessageCodeEnum.WARNING).message("Uyarı!").build());
 
-        mockMvc.perform(post("/api/department/first/asdx")).andDo(print())
+        mockMvc.perform(post("/api/department/list")).andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.status", Matchers.equalTo("OK")))
-                .andExpect(jsonPath("$.messageCode", Matchers.equalTo("INFO")))
-                .andExpect(jsonPath("$.message", Matchers.equalTo("Departman başarıyla listelendi.")))
-                .andExpect(jsonPath("$.data", Matchers.notNullValue()))
-                .andExpect(jsonPath("$.data.id", Matchers.is(100)))
-                .andExpect(jsonPath("$.data.name", Matchers.equalTo("Hukuk")));
+                .andExpect(jsonPath("$.messageCode", Matchers.equalTo(MessageCodeEnum.WARNING.getValue())))
+                .andExpect(jsonPath("$.message", Matchers.equalTo("Uyarı!")))
+                .andExpect(jsonPath("$.data", Matchers.nullValue()));
     }
 
 }

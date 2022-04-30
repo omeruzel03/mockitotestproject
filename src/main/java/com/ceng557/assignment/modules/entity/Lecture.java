@@ -5,7 +5,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.*;
 
 @Entity
 @Getter
@@ -32,30 +31,4 @@ public class Lecture {
     @Column(name = "pass_grade")
     private Integer passGrade;
 
-    @OneToMany(mappedBy = "lecture")
-    private Set<StudentLecture> studentLectures;
-
-    @OneToMany(mappedBy = "teacher")
-    private List<TeacherLecture> teacherLectures;
-
-    public Lecture(String code, String name) {
-        this.code = code;
-        this.name = name;
-    }
-
-    public boolean isStudentRegistered(Student student) {
-        return studentLectures != null && studentLectures.contains(new StudentLecture(student, this));
-    }
-
-
-    @Override
-    public String toString() {
-        return "Lecture{" +
-                "id=" + id +
-                ", code='" + code + '\'' +
-                ", name='" + name + '\'' +
-                ", quota=" + quota +
-                ", passGrade=" + passGrade +
-                '}';
-    }
 }

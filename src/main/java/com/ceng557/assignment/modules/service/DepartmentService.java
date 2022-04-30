@@ -7,6 +7,5 @@ import java.util.List;
 public interface DepartmentService {
 
     List<Department> getDepartmentList();
-    Department getFirstDepartmentByNameContains(String name);
 
 }

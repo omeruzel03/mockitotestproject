@@ -1,16 +1,17 @@
 package com.ceng557.assignment.modules.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "teacher", schema = "assignment")
 public class Teacher {
 
@@ -32,23 +33,4 @@ public class Teacher {
     @Column(name = "active")
     private Boolean active;
 
-    @OneToMany(mappedBy = "lecture")
-    private List<TeacherLecture> teacherLectures;
-
-    public Teacher(String number, String name, String surname) {
-        this.number = number;
-        this.name = name;
-        this.surname = surname;
-        this.active = Boolean.TRUE;
-    }
-
-    @Override
-    public String toString() {
-        return "Teacher{" +
-                "id=" + id +
-                ", number='" + number + '\'' +
-                ", name='" + name + '\'' +
-                ", surname='" + surname + '\'' +
-                ", active=" + active + "}";
-    }
 }

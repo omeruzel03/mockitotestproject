@@ -17,7 +17,7 @@ public class GenericExceptionHandler {
     public ResponseEntity<Object> handleExceptions(RuntimeException exception, WebRequest request) {
         if(exception instanceof GenericException){
             GenericException genericException = (GenericException) exception;
-            if(genericException.getMessageCodeEnum().equals(MessageCodeEnum.ERROR.getValue())){
+            if(genericException.getMessageCodeEnum().getValue().equals(MessageCodeEnum.ERROR.getValue())){
                 return new ResponseEntity<>(new GenericResponse<>(HttpStatus.INTERNAL_SERVER_ERROR, genericException.getMessageCodeEnum(), genericException.getMessage(), null), HttpStatus.INTERNAL_SERVER_ERROR);
             }
             return new ResponseEntity<>(new GenericResponse<>(HttpStatus.OK, genericException.getMessageCodeEnum(), genericException.getMessage(), null), HttpStatus.OK);

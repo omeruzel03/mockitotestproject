@@ -2,7 +2,6 @@ package com.ceng557.assignment.rest.util;
 
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
-import org.springframework.util.ObjectUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -16,9 +15,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.StringReader;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class DaoUtil {
@@ -66,30 +62,6 @@ public class DaoUtil {
                 sqlQueries.put(queryName, n.getTextContent().trim());
             }
         }
-
-    }
-
-    public static boolean hasColumn(ResultSet rs, String columnName) throws SQLException {
-        ResultSetMetaData rsmd = rs.getMetaData();
-        int columns = rsmd.getColumnCount();
-        for(int i=1 ; i<=columns ; i++){
-            if(columnName.equalsIgnoreCase(rsmd.getColumnName(i))){
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * @param rs Sql sonucu dönen ResultSet
-     * @param columnName Sorgulanmak istenen sütun ismi
-     * @return İlgili sütun içideki değer null ise false değilse true döner
-     * */
-    public static boolean hasData(ResultSet rs, String columnName) throws SQLException {
-        if(!ObjectUtils.isEmpty(rs.getString(columnName))){
-            return true;
-        }
-        return false;
 
     }
 

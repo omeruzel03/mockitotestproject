@@ -5,7 +5,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.Objects;
 
 @Entity
 @Getter
@@ -20,38 +19,10 @@ public class TeacherLecture {
     @SequenceGenerator(sequenceName = "teacher_lecture_seq", allocationSize = 1, name = "teacher_lecture_seq")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "teacher_id")
-    private Teacher teacher;
+    @Column(name = "teacher_id")
+    private Long teacherId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "lecture_id")
-    private Lecture lecture;
+    @Column(name = "lecture_id")
+    private Long lectureId;
 
-    public TeacherLecture(Teacher teacher, Lecture lecture) {
-        this.teacher = teacher;
-        this.lecture = lecture;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        TeacherLecture that = (TeacherLecture) o;
-        return id.equals(that.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
-    }
-
-    @Override
-    public String toString() {
-        return "TeacherLecture{" +
-                "id=" + id +
-                ", teacher=" + teacher +
-                ", lecture=" + lecture +
-                '}';
-    }
 }
