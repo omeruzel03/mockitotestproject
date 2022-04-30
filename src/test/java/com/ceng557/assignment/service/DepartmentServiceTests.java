@@ -39,6 +39,8 @@ public class DepartmentServiceTests {
         Assertions.assertNotNull(list);
         Assertions.assertEquals(100L, list.get(0).getId());
         Assertions.assertEquals("Hukuk", list.get(0).getName());
+
+        Mockito.verify(departmentRepository, Mockito.times(1)).findAll();
     }
 
     @Test

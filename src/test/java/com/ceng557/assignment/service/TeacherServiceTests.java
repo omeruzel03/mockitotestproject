@@ -41,6 +41,8 @@ public class TeacherServiceTests {
         Assertions.assertEquals("Ahmet", teacher.getName());
         Assertions.assertEquals("Cansoy", teacher.getSurname());
         Assertions.assertTrue(Boolean.TRUE);
+
+        Mockito.verify(teacherRepository, Mockito.times(1)).findByNumber(any());
     }
 
     @Test
