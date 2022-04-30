@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<queries>
+    <query name="getTeacherLecturesByTeacherNumber">
+        SELECT code FROM lecture l
+        INNER JOIN teacher_lecture tl ON tl.lecture_id = l.id
+        LEFT JOIN teacher t ON t.id = tl.teacher_id
+        WHERE t.number = :teacher_number
+        ORDER BY l.code ASC
+    </query>
+</queries>
