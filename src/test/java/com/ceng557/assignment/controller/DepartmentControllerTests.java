@@ -35,7 +35,7 @@ public class DepartmentControllerTests {
     private static Department department;
 
     @BeforeAll
-    public static void setUp(){
+    public static void setUp() {
         department = new Department(100L, "Hukuk");
     }
 

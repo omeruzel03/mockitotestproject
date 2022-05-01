@@ -21,7 +21,7 @@ public class DepartmentController {
     private final DepartmentService departmentService;
 
     @RequestMapping(value = "/list", method = RequestMethod.POST)
-    public GenericResponse<List<Department>> getDepartmentList(){
+    public GenericResponse<List<Department>> getDepartmentList() {
         List<Department> list = departmentService.getDepartmentList();
         return new GenericResponse<>(HttpStatus.OK, MessageCodeEnum.INFO, "Departmanlar başarıyla listelendi.", list);
     }

@@ -1,6 +1,8 @@
 package com.ceng557.assignment.modules.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -9,6 +11,8 @@ import javax.persistence.*;
 @Getter
 @Setter
 @Table(name = "student", schema = "assignment")
+@NoArgsConstructor
+@AllArgsConstructor
 public class Student {
 
     @Id
