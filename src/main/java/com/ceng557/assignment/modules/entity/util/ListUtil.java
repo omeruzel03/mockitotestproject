@@ -1,4 +1,4 @@
-package com.ceng557.assignment.rest.util;
+package com.ceng557.assignment.modules.entity.util;
 
 import com.ceng557.assignment.modules.entity.Student;
 
