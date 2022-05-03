@@ -9,7 +9,8 @@ public interface StudentService {
 
     List<Student> getStudentList();
 
+    List<Student> getGraduatedStudentList();
+
     Student save(Student student) throws IllegalArgumentException;
 
-    Student save(String studentNumber, String firstName, String lastName);
 }
