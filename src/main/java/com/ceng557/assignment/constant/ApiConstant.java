@@ -8,4 +8,6 @@ public interface ApiConstant {
     public static final String TEACHER_URL = "/teacher";
     public static final String LECTURE_URL = "/lecture";
 
+    public static final String STUDENT_URL = "/student";
+
 }
