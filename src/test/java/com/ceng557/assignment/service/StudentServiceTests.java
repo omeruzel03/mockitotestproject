@@ -1,23 +1,28 @@
 package com.ceng557.assignment.service;
 
 import com.ceng557.assignment.modules.entity.Student;
+import com.ceng557.assignment.modules.entity.util.ListUtil;
 import com.ceng557.assignment.modules.repository.StudentRepository;
 import com.ceng557.assignment.modules.service.StudentService;
 import com.ceng557.assignment.modules.service.impl.StudentServiceImpl;
-import com.ceng557.assignment.modules.entity.util.ListUtil;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.util.List;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.SpyBean;
 
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
+@SpringBootTest
 public class StudentServiceTests {
+    @SpyBean
+    StudentService service;
+
+
     @Test
     public void testSaveStudent() {
         // Data setup
@@ -85,36 +90,24 @@ public class StudentServiceTests {
 
     @Test
     public void testGetAllStudents_AsSpy() {
-        // Data setup
-        List<Student> students = List.of(
-                new Student(3L, "202271003", "Egemen", "Olcay", false),
-                new Student(4L, "202271004", "Filiz", "Olcay", true)
-        );
 
-        // Mock setup
-        StudentRepository repository = mock(StudentRepository.class);
-        StudentService spyService = spy(new StudentServiceImpl(repository));
-
-        doReturn(students).when(repository).findAll();
-        doReturn(ListUtil.filterGraduated(repository.findAll()))
-                .when(spyService).getGraduatedStudentList();
+        doReturn(ListUtil.filterGraduated(service.getStudentList()))
+                .when(service).getGraduatedStudentList();
 
         // Service's real method is used since a spy object was created
-        Student student1 = spyService.getStudentList().get(0);
-        Assertions.assertEquals(student1.getNumber(), "202271003");
-        Assertions.assertEquals(student1.getId(), 3L);
-        Assertions.assertEquals(student1.getName(), "Egemen");
+        Student student1 = service.getStudentList().get(0);
+        Assertions.assertEquals(student1.getNumber(), "202271001");
+        Assertions.assertEquals(student1.getId(), 1L);
+        Assertions.assertEquals(student1.getName(), "Atalay");
 
         // getGraduatedList is not implemented and would throw error if the real method was used
-        Student student2 = spyService.getGraduatedStudentList().get(0);
-        Assertions.assertEquals(student2.getNumber(), "202271004");
-        Assertions.assertEquals(student2.getId(), 4L);
-        Assertions.assertEquals(student2.getName(), "Filiz");
+        Student student2 = service.getGraduatedStudentList().get(0);
+        Assertions.assertEquals(student2.getNumber(), "202271003");
+        Assertions.assertEquals(student2.getId(), 3L);
+        Assertions.assertEquals(student2.getName(), "Ahmet");
         Assertions.assertEquals(student2.getGraduated(), true);
 
-
-        verify(repository, times(2)).findAll();
-        verify(spyService, times(1)).getStudentList();
-        verify(spyService, times(1)).getGraduatedStudentList();
+        verify(service, times(2)).getStudentList();
+        verify(service, times(1)).getGraduatedStudentList();
     }
 }
