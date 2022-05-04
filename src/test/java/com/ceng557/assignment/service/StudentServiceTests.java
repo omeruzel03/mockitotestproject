@@ -97,13 +97,11 @@ public class StudentServiceTests {
         // Service's real method is used since a spy object was created
         Student student1 = service.getStudentList().get(0);
         Assertions.assertEquals(student1.getNumber(), "202271001");
-        Assertions.assertEquals(student1.getId(), 1L);
         Assertions.assertEquals(student1.getName(), "Atalay");
 
         // getGraduatedList is not implemented and would throw error if the real method was used
         Student student2 = service.getGraduatedStudentList().get(0);
         Assertions.assertEquals(student2.getNumber(), "202271003");
-        Assertions.assertEquals(student2.getId(), 3L);
         Assertions.assertEquals(student2.getName(), "Ahmet");
         Assertions.assertEquals(student2.getGraduated(), true);
 
