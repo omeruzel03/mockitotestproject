@@ -1,31 +1,27 @@
 package com.ceng557.assignment.service;
 
 import com.ceng557.assignment.modules.entity.Student;
+import com.ceng557.assignment.modules.entity.util.ListUtil;
 import com.ceng557.assignment.modules.repository.StudentRepository;
+import com.ceng557.assignment.modules.service.StudentService;
 import com.ceng557.assignment.modules.service.impl.StudentServiceImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.util.Collections;
-import java.util.List;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.SpyBean;
 
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
+@SpringBootTest
 public class StudentServiceTests {
-    @Spy
-    @InjectMocks
-    public static StudentServiceImpl studentService;
+    @SpyBean
+    StudentService service;
 
-    @Mock
-    public static StudentRepository repository;
 
     @Test
     public void testSaveStudent() {
@@ -36,14 +32,16 @@ public class StudentServiceTests {
         student.setSurname("Aytekin");
 
         // Mock setup
-        given(studentService.save("202271001", "Atalay", "Aytekin")).willReturn(student);
+        StudentRepository repository = mock(StudentRepository.class);
+        StudentService studentService = new StudentServiceImpl(repository);
+        given(repository.save(student)).willReturn(student);
 
-        Student savedStudent = studentService.save("202271001", "Atalay", "Aytekin");
+        Student savedStudent = studentService.save(student);
         Assertions.assertEquals(savedStudent.getNumber(), "202271001");
         Assertions.assertEquals(savedStudent.getName(), "Atalay");
         Assertions.assertEquals(savedStudent.getSurname(), "Aytekin");
 
-        verify(studentService).save("202271001", "Atalay", "Aytekin");
+        verify(repository).save(student);
     }
 
     @Test
@@ -54,13 +52,13 @@ public class StudentServiceTests {
         student.setNumber("00000");
 
         // Mock setup
+        StudentService studentService = mock(StudentService.class);
         doThrow(new IllegalArgumentException(
                 String.format("%s is not a correct number format", student.getNumber())
         )).when(studentService).save(student);
 
         try {
             studentService.save(student);
-
             // Should not proceed after this and should jump to catch block
             Assertions.fail("Must throw exception");
         } catch (Exception e) {
@@ -72,21 +70,44 @@ public class StudentServiceTests {
     }
 
     @Test
+    public void testGetStudentByNumber() {
+        String STUDENT_NUMBER = "202271003";
+        Student student = new Student(1L, STUDENT_NUMBER, "Egemen", "Aytekin", true);
+
+        StudentRepository repository = mock(StudentRepository.class);
+        doReturn(student).when(repository).getStudentByNumber(STUDENT_NUMBER);
+
+        StudentService studentService = new StudentServiceImpl(repository);
+        Student studentResp = studentService.getByNumber(STUDENT_NUMBER);
+
+        Assertions.assertEquals(studentResp.getId(), student.getId());
+        Assertions.assertEquals(studentResp.getNumber(), student.getNumber());
+        Assertions.assertEquals(studentResp.getName(), student.getName());
+        Assertions.assertEquals(studentResp.getSurname(), student.getSurname());
+
+        verify(repository, times(1)).getStudentByNumber(STUDENT_NUMBER);
+    }
+
+    @Test
     public void testGetAllStudents_AsSpy() {
-        // Data setup
-        List<Student> students = Collections.singletonList(new Student(3L, "202271003", "Egemen", "Olcay", true));
 
-        // Mock setup
-        doReturn(students).when(repository).findAll();
+        doReturn(ListUtil.filterGraduated(service.getStudentList()))
+                .when(service).getGraduatedStudentList();
 
-        Student student = studentService.getStudentList().get(0);
-        Assertions.assertEquals(student.getNumber(), "202271003");
-        Assertions.assertEquals(student.getId(), 3L);
-        Assertions.assertEquals(student.getName(), "Egemen");
+        // Service's real method is used since a spy object was created
+        Student student1 = service.getStudentList().get(0);
+        Assertions.assertEquals(student1.getNumber(), "202271001");
+        Assertions.assertEquals(student1.getId(), 1L);
+        Assertions.assertEquals(student1.getName(), "Atalay");
 
-        verify(repository, times(1)).findAll();
+        // getGraduatedList is not implemented and would throw error if the real method was used
+        Student student2 = service.getGraduatedStudentList().get(0);
+        Assertions.assertEquals(student2.getNumber(), "202271003");
+        Assertions.assertEquals(student2.getId(), 3L);
+        Assertions.assertEquals(student2.getName(), "Ahmet");
+        Assertions.assertEquals(student2.getGraduated(), true);
 
-        // This method is run on real studentService object
-        verify(studentService, times(1)).getStudentList();
+        verify(service, times(2)).getStudentList();
+        verify(service, times(1)).getGraduatedStudentList();
     }
 }

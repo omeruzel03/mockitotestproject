@@ -29,12 +29,13 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
+    public List<Student> getGraduatedStudentList() {
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
+
+    @Override
     public Student save(Student student) {
         return studentRepository.save(student);
     }
 
-    @Override
-    public Student save(String studentNumber, String firstName, String lastName) {
-        return null;
-    }
 }
