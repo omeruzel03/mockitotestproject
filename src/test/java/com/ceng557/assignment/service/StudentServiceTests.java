@@ -8,6 +8,7 @@ import com.ceng557.assignment.modules.service.impl.StudentServiceImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.function.Executable;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.SpyBean;
@@ -86,6 +87,12 @@ public class StudentServiceTests {
         Assertions.assertEquals(studentResp.getSurname(), student.getSurname());
 
         verify(repository, times(1)).getStudentByNumber(STUDENT_NUMBER);
+    }
+
+    @Test
+    public void testGetGraduatedList_ThrowsUnsupportedOperationException() {
+        StudentService studentService = new StudentServiceImpl(mock(StudentRepository.class));
+        Assertions.assertThrows(UnsupportedOperationException.class, studentService::getGraduatedStudentList);
     }
 
     @Test
